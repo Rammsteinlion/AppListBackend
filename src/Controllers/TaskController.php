@@ -34,15 +34,9 @@ class TaskController
         $token = self::$headers['Authorization'];
         Security::validateTokenJwt($token, Security::secretKey());
         if (self::$method == 'post' && $endPoint == self::$route) {
-            // foreach (self::$data as $key => $value) {
-            //     if ($value === '' || $value === null) {
-            //         echo json_encode(ResponseHttp::status400('Todos los campos son necesarios'));
-            //         break;
-            //     }
-            // };
 
             $taskModel = new TaskModel(self::$data);
-            echo json_encode($taskModel::saveTask('hol'));
+            echo json_encode($taskModel::saveTask());
         }
         exit;
     }

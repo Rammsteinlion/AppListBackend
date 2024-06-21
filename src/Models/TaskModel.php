@@ -30,7 +30,8 @@ class TaskModel extends ConnectionDB
         self::$updated_at = date('Y-m-d H:i:s');
         self::$expiration_date =  $data['expiration_date'];
         self::$task_id =  $data['id'];
-        self::$headers = getallheaders();
+        // self::$headers = getallheaders();
+
     }
 
 
@@ -131,40 +132,34 @@ class TaskModel extends ConnectionDB
     }
 
 
-    final public static function saveTask(string $saludo): void
+    final public static function saveTask(): void
     {
-        var_dump($saludo);
-        echo json_encode(ResponseHttp::status200("Tarea registrada con exito"));
-        // var_dump('GUNCIONO');
-        // die();
-        // session_start();
-        
-        // try {
+        session_start();
 
-        //     die('GUARDAR');
-        //     $con = self::getConnection();
-        //     $query1 = "INSERT INTO task (category_id,user_assigned,description,priority,state,created_at,expiration_date) VALUES";
-        //     $query2 = "(:category_id,:user_assigned,:description,:priority,:state,:created_at,:expiration_date)";
-        //     $query = $con->prepare($query1 . $query2);
-        //     $query->execute([
-        //         "category_id" => 20,
-        //         "user_assigned" => $_SESSION['user']['id_user'],
-        //         "description" => self::getDescription(),
-        //         "priority" => self::getState(),
-        //         "state" => self::getState(),
-        //         "created_at" =>  self::getCreatedAt(),
-        //         "expiration_date" => self::getExpirationDate()
-        //     ]);
+        try {
+            $con = self::getConnection();
+            $query1 = "INSERT INTO task (category_id,user_assigned,description,priority,state,created_at,expiration_date) VALUES";
+            $query2 = "(:category_id,:user_assigned,:description,:priority,:state,:created_at,:expiration_date)";
+            $query = $con->prepare($query1 . $query2);
+            $query->execute([
+                "category_id" => 20,
+                "user_assigned" => $_SESSION['user']['id_user'],
+                "description" => self::getDescription(),
+                "priority" => self::getState(),
+                "state" => self::getState(),
+                "created_at" =>  self::getCreatedAt(),
+                "expiration_date" => self::getExpirationDate()
+            ]);
 
-        //     if ($query->rowCount() > 0) {
-        //         echo json_encode(ResponseHttp::status200("Tarea registrada con exito"));
-        //     } else {
-        //         echo json_encode(ResponseHttp::status500("Error al registrar tarea"));
-        //     }
-        // } catch (\PDOException $pdo) {
-        //     error_log("TaskModel::postSaveTask -> . $pdo");
-        //     die(json_encode(ResponseHttp::status500()));
-        // }
+            if ($query->rowCount() > 0) {
+                echo json_encode(ResponseHttp::status200("Tarea registrada con exito"));
+            } else {
+                echo json_encode(ResponseHttp::status500("Error al registrar tarea"));
+            }
+        } catch (\PDOException $pdo) {
+            error_log("TaskModel::postSaveTask -> . $pdo");
+            die(json_encode(ResponseHttp::status500()));
+        }
     }
 
     final public static function postUpdateTask(): array

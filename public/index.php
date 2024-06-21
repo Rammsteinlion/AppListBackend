@@ -40,14 +40,15 @@ $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 $headers = getallheaders();
 
-Router::add('task/save', function() use ($method, $route, $params, $data, $headers) {
-    $taskController = new TaskController($method, $route, $params, $data, $headers);
-    $taskController->taskSave('task/save/');
+Router::add("auth/{$params[1]}/{$params[2]}/", function() use ($method, $route, $params, $data, $headers) {
+    $userController = new UserController($method, $route, $params, $data, $headers);
+    $userController->getLogin("auth/{$params[1]}/{$params[2]}/");
 });
 
-Router::add("auth/{$params[1]}/{$params[2]}/", function() use ($method, $route, $params, $data, $headers) {
-    $taskController = new UserController($method, $route, $params, $data, $headers);
-    $taskController->getLogin("auth/{$params[1]}/{$params[2]}/");
+
+Router::add('task/save/', function() use ($method, $route, $params, $data, $headers) {
+    $taskController = new TaskController($method, $route, $params, $data, $headers);
+    $taskController->saveTask("task/save/");
 });
 
 
